@@ -1,0 +1,15 @@
+const { Router } = require('express');
+
+const userRoutes = require('./api/user.routes');
+const productRoutes = require('./api/product.routes');
+const orderRoutes = require('./api/order.routes');
+const adminRoutes = require('./api/admin.routes');
+
+const routes = Router();
+
+routes.use('/users', userRoutes);
+routes.use('/products', productRoutes);
+routes.use('/orders', orderRoutes);
+routes.use('/admin', adminRoutes);
+
+module.exports = routes;
