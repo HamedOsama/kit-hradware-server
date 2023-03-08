@@ -339,7 +339,7 @@ const logout = async (req, res, next) => {
       httpOnly: true,
       secure: true,
       path: '/',
-      // domain: '.trendlix.com',
+      domain: '.kit-hardware-center.com',
       sameSite: 'none',
     }).json({
       ok: true,

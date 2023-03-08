@@ -12,7 +12,7 @@ const sendToken = async(user, statusCode, res) => {
     httpOnly: true,
     secure: true,
     path : '/',
-    // domain: '.trendlix.com', 
+    domain: '.kit-hardware-center.com', 
     sameSite : 'lax',
   };
   user.tokens = null
