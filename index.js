@@ -20,7 +20,7 @@ const app = express();
 
 // 
 // app.use(cors({ credentials: true }));
-app.use(cors({ credentials: true, origin: ['http://localhost:3000' , 'https://kit-hardware-center.com','https://kit-hardware.vercel.app.com'] }));
+app.use(cors({ credentials: true, origin: ['http://localhost:3000' , 'https://kit-hardware-center.com','https://kit-hardware.vercel.app'] }));
 // app.use(cors({credentials : true , origin :  'https://hatlytest.trendlix.com'}));
 app.use(express.json());
 app.use(cookieParser());
