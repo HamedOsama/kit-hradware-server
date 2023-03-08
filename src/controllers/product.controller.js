@@ -95,17 +95,14 @@ const getAll = async (req, res, next) => {
     const [products, totalLength] = await Promise.all([Query.query, lengthQuery.query])
 
 
-    setTimeout(
-      () => {
-        res.status(200).json({
-          ok: true,
-          code: 200,
-          message: 'succeeded',
-          body: products,
-          totalLength: totalLength.length,
-        });
-      }
-      , 2000)
+
+    res.status(200).json({
+      ok: true,
+      code: 200,
+      message: 'succeeded',
+      body: products,
+      totalLength: totalLength.length,
+    });
 
   } catch (e) {
     next(e)
