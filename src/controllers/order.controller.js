@@ -58,7 +58,7 @@ const getAllOrders = async (req, res, next) => {
 
 const getUserOrders = async (req, res, next) => {
   try {
-    const ordersQuery = new APIFeatures(Order.find({ buyer: req.user._id }, 'id orderItems total createdAt'), req.query).sort();
+    const ordersQuery = new APIFeatures(Order.find({ buyer: req.user._id }, 'id orderItems total createdAt orderState'), req?.query).sort();
     const orders = await ordersQuery.query;
     const totalLength = await Order.find({ buyer: req.user._id }).countDocuments();
     res.status(200).json({
