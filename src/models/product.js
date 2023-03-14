@@ -12,14 +12,19 @@ const productSchema = mongoose.Schema({
         required: true,
         trim: true,
     },
-    images: [{
-        type: String,
-        // required:true
-    }],
     sellPrice: {
         type: Number,
         maxLength: [8, "Price cannot exceed 8 characters"],
     },
+    quantity: {
+        type: Number,
+        default: 0,
+        maxLength: [5, "Stock cannot exceed 5 characters"]
+    },
+    images: [{
+        type: String,
+        // required:true
+    }],
     description: {
         type: String,
         required: true,
@@ -37,11 +42,6 @@ const productSchema = mongoose.Schema({
             trim: true
         }
     }],
-    quantity: {
-        type: Number,
-        default: 0,
-        maxLength: [5, "Stock cannot exceed 5 characters"]
-    },
     rate: {
         type: Number,
         default: 0

@@ -4,6 +4,8 @@ const sharp = require('sharp');
 const fs = require('fs/promises');
 
 console.log(path.join(__dirname, '../uploads'));
+
+
 exports.Uploads = multer({
     fileFilter(req, file, cb) {
         if (!file.originalname.match(/\.(jpg|jpeg|png|jfif)$/))

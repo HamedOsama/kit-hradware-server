@@ -1,15 +1,17 @@
 const { customAlphabet } = require('nanoid');
 
-const Maintenances = require('../models/maintenance');
 const ServerError = require("../utils/ErrorInterface");
 const APIFeatures = require('../utils/apiFeatures');
-const Order = require('../models/order');
 const User = require('../models/userModel');
+const Maintenances = require('../models/maintenance');
+const Product = require('../models/product');
+const Order = require('../models/order');
 
 
 const alphabet = '0123456789';
 const nanoid = customAlphabet(alphabet, 12);
 
+// maintenance
 const addMaintenance = async (req, res, next) => {
   try {
     const { status, phone } = req.body;
@@ -39,7 +41,6 @@ const addMaintenance = async (req, res, next) => {
     next(e);
   }
 };
-
 const getAllMaintenances = async (req, res, next) => {
   try {
     const maintenancesQuery = new APIFeatures(Maintenances.find(), req?.query).filter().sort().limitFields().paginate();
@@ -57,7 +58,6 @@ const getAllMaintenances = async (req, res, next) => {
     next(e);
   }
 };
-
 const updateMaintenance = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -67,7 +67,7 @@ const updateMaintenance = async (req, res, next) => {
     if (status !== 'under maintenance' && status !== 'done' && status) {
       return next(ServerError.badRequest(400, 'wrong status'))
     }
-    const maintenance = await Maintenances.findByIdAndUpdate( id,
+    const maintenance = await Maintenances.findByIdAndUpdate(id,
       { ...req.body },
       { runValidators: true, new: true }
     );
@@ -84,7 +84,6 @@ const updateMaintenance = async (req, res, next) => {
     next(e);
   }
 };
-
 const deleteMaintenance = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -103,12 +102,64 @@ const deleteMaintenance = async (req, res, next) => {
     next(e);
   }
 };
+// product
+const addProduct = async (req, res, next) => {
+  try {
+    const product = new Product({ ...req.body })
+    await product.save();
+    res.status(201).json({
+      ok: true,
+      code: 201,
+      message: 'succeeded',
+      body: product
+    })
+  } catch (e) {
+    next(e);
+  }
+}
 
+const getAllProducts = async (req, res, next) => {
+  try {
+    req.query.category = req?.query?.category?.split(',')
+    const Query = new APIFeatures(Product.find({}, '-__v'), req?.query).filter().sort().paginate()
+    const lengthQuery = new APIFeatures(Product.find({}), req?.query).filter()
+    const [products, totalLength] = await Promise.all([Query.query, lengthQuery.query])
+    res.status(200).json({
+      ok: true,
+      code: 200,
+      message: 'succeeded',
+      body: products,
+      totalLength: totalLength.length,
+    });
+  } catch (e) {
+    next(e)
+  }
+};
 
-
+const deleteProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!id)
+      return next(ServerError.badRequest(400, 'Id is required'))
+    const product = await Product.findByIdAndDelete(id);
+    if (!product) {
+      return next(ServerError.badRequest(404, 'product not found'))
+    }
+    res.status(200).json({
+      ok: true,
+      status: 200,
+      message: 'succeeded',
+    })
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   addMaintenance,
   getAllMaintenances,
   updateMaintenance,
-  deleteMaintenance
+  deleteMaintenance,
+  addProduct,
+  getAllProducts,
+  deleteProduct
 };
