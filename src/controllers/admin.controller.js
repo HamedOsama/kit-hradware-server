@@ -135,6 +135,28 @@ const getAllProducts = async (req, res, next) => {
     next(e)
   }
 };
+const updateProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!id)
+      return next(ServerError.badRequest(400, 'Id is required'))
+    const product = await Product.findByIdAndUpdate(id,
+      { ...req.body },
+      { runValidators: true, new: true }
+    );
+    if (!product)
+      return next(ServerError.badRequest(404, 'product not found'))
+    res.status(200).json({
+      ok: true,
+      status: 200,
+      message: 'succeeded',
+      body: product
+    })
+  } catch (e) {
+    next(e);
+  }
+};
+
 
 const deleteProduct = async (req, res, next) => {
   try {
@@ -161,5 +183,6 @@ module.exports = {
   deleteMaintenance,
   addProduct,
   getAllProducts,
+  updateProduct,
   deleteProduct
 };

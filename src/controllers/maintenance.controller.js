@@ -19,7 +19,6 @@ const getAllMaintenances = async (req, res, next) => {
   }
 }
 
-
 const getMaintenance = async (req, res, next) => {
   try {
     if (!req.params.id) {
