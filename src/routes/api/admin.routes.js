@@ -24,4 +24,7 @@ router.route('/products/:id')
 //order
 router.route('/orders')
   .get(adminController.getAllOrders)
+
+router.route('/orders/:id')
+  .patch(adminController.updateOrder)
 module.exports = router;

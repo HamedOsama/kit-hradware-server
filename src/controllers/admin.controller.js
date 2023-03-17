@@ -191,6 +191,28 @@ const getAllOrders = async (req, res, next) => {
     next(e);
   }
 };
+const updateOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    if (!id)
+      return next(ServerError.badRequest(400, 'Id is required'))
+    const order = await Order.findByIdAndUpdate(id,
+      { ...req.body },
+      { runValidators: true, new: true }
+    );
+    if (!order)
+      return next(ServerError.badRequest(404, 'order not found'))
+    res.status(200).json({
+      ok: true,
+      status: 200,
+      message: 'succeeded',
+      body: order
+    })
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   addMaintenance,
   getAllMaintenances,
@@ -200,5 +222,6 @@ module.exports = {
   getAllProducts,
   updateProduct,
   deleteProduct,
-  getAllOrders
+  getAllOrders,
+  updateOrder,
 };
