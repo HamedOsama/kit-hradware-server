@@ -21,4 +21,7 @@ router.route('/products/:id')
 
 // .get(adminController.getMaintenance).delete(adminController.deleteMaintenance);
 
+//order
+router.route('/orders')
+  .get(adminController.getAllOrders)
 module.exports = router;

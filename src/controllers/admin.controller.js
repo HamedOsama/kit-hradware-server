@@ -117,7 +117,6 @@ const addProduct = async (req, res, next) => {
     next(e);
   }
 }
-
 const getAllProducts = async (req, res, next) => {
   try {
     req.query.category = req?.query?.category?.split(',')
@@ -156,8 +155,6 @@ const updateProduct = async (req, res, next) => {
     next(e);
   }
 };
-
-
 const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -176,6 +173,24 @@ const deleteProduct = async (req, res, next) => {
     next(e);
   }
 };
+
+const getAllOrders = async (req, res, next) => {
+  try {
+    const ordersQuery = new APIFeatures(Order.find(), req?.query).filter().sort().limitFields().paginate();
+    const lengthQuery = new APIFeatures(Order.find(), req?.query).filter();
+    const [orders, totalLength] = await Promise.all([ordersQuery.query, lengthQuery.query]);
+    console.log(totalLength.length)
+    res.status(200).json({
+      ok: true,
+      status: 200,
+      message: 'succeeded',
+      body: orders,
+      totalLength: totalLength.length
+    })
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   addMaintenance,
   getAllMaintenances,
@@ -184,5 +199,6 @@ module.exports = {
   addProduct,
   getAllProducts,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  getAllOrders
 };
