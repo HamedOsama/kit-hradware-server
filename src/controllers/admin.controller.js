@@ -14,11 +14,7 @@ const nanoid = customAlphabet(alphabet, 12);
 // maintenance
 const addMaintenance = async (req, res, next) => {
   try {
-    const { status, phone } = req.body;
-    if (status !== 'under maintenance' && status !== 'done' && status) {
-      return next(ServerError.badRequest(400, 'wrong status'))
-    }
-
+    const { phone } = req.body;
     const user = await User.findOne({ phone });
     if (!user) {
       return next(ServerError.badRequest(404, 'user not found'))
@@ -63,10 +59,6 @@ const updateMaintenance = async (req, res, next) => {
     const { id } = req.params;
     if (!id)
       return next(ServerError.badRequest(400, 'Id is required'))
-    const { status } = req.body;
-    if (status !== 'under maintenance' && status !== 'done' && status) {
-      return next(ServerError.badRequest(400, 'wrong status'))
-    }
     const maintenance = await Maintenances.findByIdAndUpdate(id,
       { ...req.body },
       { runValidators: true, new: true }
