@@ -24,7 +24,7 @@ const getMaintenance = async (req, res, next) => {
     if (!req.params.id) {
       return next(ServerError.badRequest(401, 'maintenance id is required'));
     }
-    const maintenance = await Maintenance.findOne({ id: req.params.id, phone: req.user.phone });
+    const maintenance = await Maintenance.findOne({ _id: req.params.id, phone: req.user.phone });
     if (!maintenance) {
       return next(ServerError.badRequest(401, 'maintenance not found'))
     }
