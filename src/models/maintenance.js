@@ -16,9 +16,9 @@ const maintenanceSchema = new Schema({
     trim: true,
   },
   status: {
-    type: String,
+    type: Number,
     trim: true,
-    default : 'under maintenance'
+    default : 0
   },
   deviceName : {
     type: String,
@@ -39,6 +39,7 @@ const maintenanceSchema = new Schema({
   cost : {
     type: String,
     trim: true,
+    default : '0'
   },
 },{ timestamps: true  , _id: false});
 
