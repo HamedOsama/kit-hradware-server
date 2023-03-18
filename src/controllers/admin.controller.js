@@ -35,7 +35,6 @@ const signup = async (req, res, next) => {
     next(e)
   }
 };
-
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body
@@ -82,6 +81,30 @@ const auth = async (req, res, next) => {
     next(e)
   }
 }
+//stats
+const getStats = async (req, res, next) => {
+  try {
+    const usersQuery = User.countDocuments();
+    const productsQuery = Product.countDocuments();
+    const ordersQuery = Order.countDocuments();
+    const maintenancesQuery = Maintenances.countDocuments();
+    const [users, products, orders, maintenances] = await Promise.all([usersQuery, productsQuery, ordersQuery, maintenancesQuery]);
+    res.status(200).json({
+      ok: true,
+      code: 200,
+      message: 'succeeded',
+      body: {
+        users,
+        products,
+        orders,
+        maintenances
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
+}
+
 // maintenance
 const addMaintenance = async (req, res, next) => {
   try {
@@ -281,6 +304,7 @@ module.exports = {
   login,
   auth,
   logout,
+  getStats,
   addMaintenance,
   getAllMaintenances,
   updateMaintenance,

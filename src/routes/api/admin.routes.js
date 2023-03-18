@@ -10,6 +10,9 @@ router.route('/signup').post(adminController.signup);
 router.route('/login').post(adminController.login);
 router.route('/auth').get(authUserAsAdmin, adminController.auth);
 router.route('/logout').get(authUserAsAdmin, adminController.logout);
+
+//stats 
+router.route('/stats').get(authUserAsAdmin, adminController.getStats);
 // maintenance
 router.route('/maintenances')
   .get(authUserAsAdmin, adminController.getAllMaintenances)
