@@ -6,11 +6,61 @@ const User = require('../models/userModel');
 const Maintenances = require('../models/maintenance');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const sendToken = require('../utils/jwtToken');
+const Admin = require('../models/admin');
 
 
 const alphabet = '0123456789';
 const nanoid = customAlphabet(alphabet, 12);
 
+//auth
+const signup = async (req, res, next) => {
+  try {
+    // get admin data from request
+    const { password, email } = req.body;
+    // check if admin's data exist
+    if (!email || !password)
+      return next(ServerError.badRequest(400, 'enter all fields'));
+    // create new admin
+    const admin = new Admin({
+      email,
+      password
+    });
+    // save admin in database
+    await admin.save();
+    sendToken(admin, 201, res);
+  } catch (e) {
+    console.log(e)
+    e.statusCode = 400
+    next(e)
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body
+    console.log(email, password)
+    if (!email || !password)
+      return next(ServerError.badRequest(400, 'Email and password are required'));
+    const admin = await Admin.Login(email, password);
+    // send response to admin;
+    sendToken(admin, 200, res);
+  } catch (e) {
+    e.statusCode = 401;
+    next(e);
+  }
+};
+const auth = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      ok: true,
+      code: 200,
+      message: 'succeeded',
+    })
+  } catch (e) {
+    next(e)
+  }
+}
 // maintenance
 const addMaintenance = async (req, res, next) => {
   try {
@@ -206,6 +256,9 @@ const updateOrder = async (req, res, next) => {
 };
 
 module.exports = {
+  signup,
+  login,
+  auth,
   addMaintenance,
   getAllMaintenances,
   updateMaintenance,

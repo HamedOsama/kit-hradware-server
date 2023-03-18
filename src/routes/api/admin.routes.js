@@ -1,30 +1,35 @@
 const { Router } = require('express');
 
 const adminController = require('../../controllers/admin.controller');
+const { authUser, authUserAsAdmin } = require('../../middleware/userAuth');
 
 const router = Router();
 
+//auth
+router.route('/signup').post(adminController.signup);
+router.route('/login').post(adminController.login);
+router.route('/auth').get(authUserAsAdmin, adminController.auth);
 // maintenance
 router.route('/maintenances')
-  .get(adminController.getAllMaintenances)
-  .post(adminController.addMaintenance);
+  .get(authUserAsAdmin, adminController.getAllMaintenances)
+  .post(authUserAsAdmin, adminController.addMaintenance);
 router.route('/maintenances/:id')
-  .patch(adminController.updateMaintenance)
-  .delete(adminController.deleteMaintenance);
+  .patch(authUserAsAdmin, adminController.updateMaintenance)
+  .delete(authUserAsAdmin, adminController.deleteMaintenance);
 // product
 router.route('/products')
-  .get(adminController.getAllProducts)
-  .post(adminController.addProduct);
+  .get(authUserAsAdmin, adminController.getAllProducts)
+  .post(authUserAsAdmin, adminController.addProduct);
 router.route('/products/:id')
-  .patch(adminController.updateProduct)
-  .delete(adminController.deleteProduct);
+  .patch(authUserAsAdmin, adminController.updateProduct)
+  .delete(authUserAsAdmin, adminController.deleteProduct);
 
 // .get(adminController.getMaintenance).delete(adminController.deleteMaintenance);
 
 //order
 router.route('/orders')
-  .get(adminController.getAllOrders)
+  .get(authUserAsAdmin, adminController.getAllOrders)
 
 router.route('/orders/:id')
-  .patch(adminController.updateOrder)
+  .patch(authUserAsAdmin, adminController.updateOrder)
 module.exports = router;
