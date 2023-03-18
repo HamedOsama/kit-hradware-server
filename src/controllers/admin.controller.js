@@ -50,6 +50,27 @@ const login = async (req, res, next) => {
     next(e);
   }
 };
+const logout = async (req, res, next) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((el) => {
+      return el != req.cookies.access_token;
+    });
+    await req.user.save();
+    res.status(200).clearCookie('access_token', {
+      httpOnly: true,
+      secure: true,
+      path: '/',
+      domain: '.kit-hardware-center.com',
+      sameSite: 'none',
+    }).json({
+      ok: true,
+      code: 200,
+      message: 'succeeded',
+    })
+  } catch (e) {
+    next(e)
+  }
+};
 const auth = async (req, res, next) => {
   try {
     res.status(200).json({
@@ -259,6 +280,7 @@ module.exports = {
   signup,
   login,
   auth,
+  logout,
   addMaintenance,
   getAllMaintenances,
   updateMaintenance,
