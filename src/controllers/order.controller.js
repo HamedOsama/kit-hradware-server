@@ -8,7 +8,7 @@ const nanoid = customAlphabet(alphabet, 12);
 
 const addOrder = async (req, res, next) => {
   try {
-    const { name, email, phone, city, region, address, building, floor, apartment, products, shipping, vat } = req.body;
+    const { city, region, address, building, floor, apartment, products, shipping, vat } = req.body;
 
     const subtotal = products.reduce((acc, el) => acc + (el.sellPrice * el.quantity), 0);
     const total = subtotal + shipping + vat
@@ -25,6 +25,9 @@ const addOrder = async (req, res, next) => {
     const order = new Order({
       ...req.body,
       buyer: req.user._id,
+      name : req?.user?.name,
+      email : req?.user?.email,
+      phone : req?.user?.phone,
       subtotal,
       total,
       orderItems,
