@@ -41,6 +41,10 @@ const maintenanceSchema = new Schema({
     trim: true,
     default : '0'
   },
+  notes : {
+    type: String,
+    trim: true,
+  },
 },{ timestamps: true  , _id: false});
 
 
