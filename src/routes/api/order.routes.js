@@ -4,7 +4,7 @@ const { authUser } = require('../../middleware/userAuth');
 
 const routes = Router();
 
-
+routes.route('/checkout-session').post( orderController.getCheckoutSession)
 routes.route('/').post(authUser, orderController.addOrder).get(authUser, orderController.getUserOrders);
 // routes.route('/all').get(orderController.getAllOrders)
 routes.route('/:id').get(authUser , orderController.getOrder)
