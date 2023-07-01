@@ -90,7 +90,7 @@ const createProduct = async (req, res, next) => {
 const getAll = async (req, res, next) => {
   try {
     req.query.category = req?.query?.category?.split(',')
-    const Query = new APIFeatures(Product.find({ status: 1 }, '-__v -status -updatedAt'), req?.query).filter().sort().paginate()
+    const Query = new APIFeatures(Product.find({ status: 1 }, '-__v -status -updatedAt'), req?.query).filter().sort('name').paginate()
     const lengthQuery = new APIFeatures(Product.find({ status: 1 }), req?.query).filter()
     const [products, totalLength] = await Promise.all([Query.query, lengthQuery.query])
 
