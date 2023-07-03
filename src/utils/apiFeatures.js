@@ -9,8 +9,15 @@ class APIFeatures {
     excludedFields.forEach(el => delete queryObj[el]);
     // 1B) Advanced filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
-    
+    // 1C) Normalizing query string
+    // queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    // 1D) Searching with regex
+    queryStr = queryStr.replace(/"([^"]+)":"([^"]+)"/g, (match, field, value) => {
+      if (/\b(gte|gt|lte|lt)\b/.test(value)) {
+        return `$${match}`; // Exclude fields with gte, gt, lte, or lt from regex transformation
+      }
+      return `"${field}": { "$regex": "${value}", "$options": "i" }`;
+    });
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
   }
