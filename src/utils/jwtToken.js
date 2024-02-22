@@ -13,7 +13,7 @@ const sendToken = async(user, statusCode, res) => {
     secure: true,
     path : '/',
     // domain: '.kit-hardware-center.com', 
-    sameSite : 'lax',
+    sameSite : 'none',
   };
   user.tokens = null
   user.password = null
